@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Backend\Admin\AdminController;
-use App\Http\Controllers\Backend\Vendor\VendorController;
-use App\Http\Controllers\Backend\User\UserController;
+use App\Http\Controllers\ShakilCon; 
+use App\Http\Controllers\Backend\ProductController; 
+use App\Http\Controllers\Backend\CategoryController; 
+use App\Http\Controllers\Backend\SubCatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,55 +17,42 @@ use App\Http\Controllers\Backend\User\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[ShakilCon::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/about',[ShakilCon::class, 'about'])->name('about');
+Route::get('/service', [ShakilCon::class, 'service'])->name('service');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// product add,delete,edit route start--------- 
 
-// Admin Controller start 
-Route::middleware('auth','role:Admin')->group(function () {
-    Route::controller(AdminController::class)->group(function(){
-        Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
-        Route::get('/admin/logout', 'adminlogout')->name('admin.logout');
-        Route::get('/admin/profile', 'adminProfile')->name('admin.profile');
-        Route::post('/admin/profile/update/{id}', 'adminProfileUpdate')->name('admin.profile.update');
-    });
-});
+Route::get('/add/product', [ProductController::class, 'index'])->name('product.add');
+Route::post('/save/product', [ProductController::class, 'save'])->name('product.save');
 
-//Admin Controller End
+Route::get('/edit/product/{id}', [ProductController::class, 'edit'])->name('product.edit');
+Route::post('/update/product/{id}', [ProductController::class, 'update'])->name('product.update');
 
-// Vendor Controller start 
-Route::middleware('auth','role:Vendor')->group(function () {
-    Route::controller(VendorController::class)->group(function(){
-        Route::get('/vendor/dashboard', 'index')->name('vendor.dashboard');
-        Route::get('/vendor/logout', 'vendorlogout')->name('vendor.logout');
+Route::get('/manage/product', [ProductController::class, 'manage'])->name('product.manage');
+Route::get('/manage/product/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
 
-    });
-});
+// product add,delete,edit route end -----------
+// Category add,delete,edit route start -----------
 
-//Vendor Controller End
+Route::get('/category/add', [CategoryController::class, 'index'])->name('category.add');
+Route::post('/category/save', [CategoryController::class, 'save'])->name('category.save');
+Route::get('/category/manage', [CategoryController::class, 'manage'])->name('category.manage');
+// edit delete update route 
+Route::get('/category/delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+Route::post('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
 
-// User Controller start 
-Route::middleware('auth','role:User')->group(function () {
-    Route::controller(UserController::class)->group(function(){
-        Route::get('/user/dashboard', 'index')->name('User.dashboard');
-    });
-});
+// Category add,delete,edit route end------------ 
 
-//User Controller End
+// sub category route start ---------------
 
+Route::get('/subcategory/add',[SubCatController::class, 'index']);
+Route::get('/subcategory/manage',[SubCatController::class, 'manage']);
+Route::post('/subcategory/save',[SubCatController::class, 'save'])->name('subCategory.save');
+Route::get('/subcategory/edit/{id}',[SubCatController::class, 'edit'])->name('subCategory.edit');
+Route::get('/subcategory/delete/{id}',[SubCatController::class, 'delete'])->name('subCategory.delete');
+Route::post('/subcategory/update/{id}',[SubCatController::class, 'update'])->name('subCategory.update');
 
-
-
-
-
-require __DIR__.'/auth.php';
+// sub category route end ---------------

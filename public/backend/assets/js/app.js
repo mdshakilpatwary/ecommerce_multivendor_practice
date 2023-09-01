@@ -113,6 +113,9 @@ $(function() {
     function theme8() {
       $('html').attr('class', 'color-sidebar sidebarcolor8');
     }
+	$('#dashboard').click(function(){
+		$(location).attr('href', 'http://127.0.0.1:8000/');
+	});
 
 
 
